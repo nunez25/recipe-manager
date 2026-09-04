@@ -3,6 +3,13 @@ const FILTERS = ["All", "Breakfast", "Lunch", "Dinner", "Dessert"];
 export default function CategoryFilter({ activeFilter, onFilterChange }) {
   return (
     <div className="flex flex-wrap gap-2 justify-center">
+
+      {<button>
+          onClick={() => onFilterChange(f)}
+          className=[activeFilter === f ?]
+          {f}
+        </button>
+      }
       {/* TODO: render one button per FILTERS entry.
           - Each button calls onFilterChange(f) on click.
           - The active button should look different from the others
