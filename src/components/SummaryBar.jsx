@@ -5,11 +5,11 @@ export default function SummaryBar({ total, favorites }) {
           - First: title "Total Recipes", value {total}
           - Second: title "Favorites", value {favorites} ★
       */}
-      <div className="Total Recipe">
+      <div className="stat-title">
         {total}
       </div>
 
-      <div className="Favorites">
+      <div className="stat-value">
         {favorites}⭐
       </div>
     </div>
