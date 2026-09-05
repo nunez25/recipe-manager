@@ -4,17 +4,29 @@ export default function CategoryFilter({ activeFilter, onFilterChange }) {
   return (
     <div className="flex flex-wrap gap-2 justify-center">
 
-      {<button>
+      {/* {<button>
           onClick={() => onFilterChange(f)}
           className=[activeFilter === f ?]
           {f}
         </button>
-      }
+      } */}
       {/* TODO: render one button per FILTERS entry.
           - Each button calls onFilterChange(f) on click.
           - The active button should look different from the others
             (e.g., "btn-primary" for active, "btn-outline" otherwise).
           - Don't forget the `key` prop! */}
+          {FILTERS.map((f) => (
+            <button
+              key={f}
+              onClick={() => onFilterChange(f)}
+              className={`btn btn-sm capitalize ${
+                activeFilter === f ? "btn-primary" : "btn-ghost"
+              }`}
+            >
+              {f}
+            </button>
+          ))}
+
     </div>
   );
 }
