@@ -1,9 +1,9 @@
 import type { Recipe } from "@/features/meals/meals.types";
 
 export interface SavedRecipe extends Recipe {
-  id: number;
+  id: string;
 }
 
 export type NewRecipe = Recipe;
 
-export type RecipePatch = { id: number } & Partial<Omit<SavedRecipe, "id">>;
+export type RecipePatch = { id: string } & Partial<Omit<SavedRecipe, "id">>;
