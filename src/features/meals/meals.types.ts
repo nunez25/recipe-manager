@@ -8,7 +8,7 @@ export interface Meal {
   strMeal: string;
   strCategory: string;
   strMealThumb: string;
-  // strIngredient1..20 and strMeasure1..20, any of which may be "" or null.
+  // strIngredient1..20 and strMeasure1..20 may be empty or null.
   [key: string]: string | null;
 }
 

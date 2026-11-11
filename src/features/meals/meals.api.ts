@@ -6,10 +6,10 @@ import type { Meal, Recipe, SearchResponse, CategoriesResponse } from "./meals.t
 //
 // This file is the edge. TheMealDB's ugliness (idMeal, strMeal, strCategory,
 // strIngredient1 ... strIngredient20) stops here and never reaches a component.
-// The types in meals.types.ts are already written for you — read them first.
+// The types in meals.types.ts keep this boundary explicit.
 // ---------------------------------------------------------------------------
 
-// TODO 1 — Normalise one Meal into our Recipe shape.
+// Normalise one Meal into our Recipe shape.
 //
 // Rules (and the compiler will hold you to the Recipe type):
 //   mealId      <- idMeal      keep it: you need it to avoid saving duplicates
@@ -17,7 +17,7 @@ import type { Meal, Recipe, SearchResponse, CategoriesResponse } from "./meals.t
 //   category    <- strCategory
 //   thumb       <- strMealThumb
 //   ingredients <- the strIngredient1..20 values that are not empty or null.
-//                  Twenty numbered keys is not a shape any component should
+//                  Twenty numbered keys is not a shape components should
 //                  have to loop over. A type predicate keeps it string[]:
 //                    .filter((x): x is string => Boolean(x && x.trim()))
 //   time        <- 0     TheMealDB has no prep time. The user supplies it.
@@ -42,7 +42,7 @@ export function toRecipe(meal: Meal): Recipe {
   };
 }
 
-// TODO 2 — Search the catalogue.
+// Search the catalogue.
 //
 //   GET /search.php?s=<query>
 //
@@ -56,7 +56,7 @@ export function toRecipe(meal: Meal): Recipe {
 //      precisely so you cannot forget.
 //   2. Return mapped Recipes, not raw Meals.
 //
-// Verify with curl before you write any React:
+// Verify the successful empty-result response before connecting the hooks:
 //   curl "https://www.themealdb.com/api/json/v1/1/search.php?s=zzzznotathing"
 export async function searchMeals(query: string): Promise<Recipe[]> {
   const { data } = await mealdb.get<SearchResponse>("/search.php", {
@@ -66,7 +66,7 @@ export async function searchMeals(query: string): Promise<Recipe[]> {
   return (data.meals ?? []).map(toRecipe);
 }
 
-// TODO 3 — The real category list.
+// Return the real category list.
 //
 //   GET /categories.php  ->  { categories: [ { strCategory: "Beef" }, ... ] }
 //
