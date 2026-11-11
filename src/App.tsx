@@ -1,49 +1,35 @@
-import { useState } from "react";
-import { useSearchMeals } from "@/features/meals/meals.hooks";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/features/auth/auth.hooks";
 import { useSavedRecipes } from "@/features/recipes/recipes.hooks";
-import SearchBar from "@/components/SearchBar";
-import MealCard from "@/components/MealCard";
-export default function SearchPage() {
-  const [term, setTerm] = useState("");
-  const { savedMealIds, create } = useSavedRecipes();
-  const search = useSearchMeals(term);
-  const results = search.data ?? [];
+import RequireAuth from "@/components/RequireAuth";
+import Layout from "@/components/Layout";
+import SearchPage from "@/pages/SearchPage";
+import SavedPage from "@/pages/SavedPage";
+import RecipeDetailPage from "@/pages/RecipeDetailPage";
+import LoginPage from "@/pages/LoginPage";
+import NotFound from "@/pages/NotFound";
+
+function Shell() {
+  const { saved } = useSavedRecipes();
+  return <Layout savedCount={saved.length} />;
+}
+
+export default function App() {
   return (
-  <>
-  <SearchBar onSearch={setTerm} />
-  {search.isLoading && (
-    <div className="text-center py-8">
-      <span className="loading loading-spinner loading-lg" />
-    </div>
-  )}
-  {search.isError && (
-    <div className="alert alert-error">
-      <span>Could not reach TheMealDB. Check your connection.</span>
-    </div>
-  )}
-  {!search.isLoading && term && results.length === 0 && (
-    <div className="text-center py-8 text-base-content/60">
-      No meals found for &ldquo;{term}&rdquo;. Try another word.
-    </div>
-  )}
-  {!term && (
-    <div className="text-center py-12 text-base-content/60">
-      Search TheMealDB above, then save what you like.
-    </div>
-  )}
-  {results.length > 0 && (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-      {results.map((meal) => (
-        <MealCard
-        key={meal.mealId}
-        meal={meal}
-        onSave={create.mutate}
-        isSaved={savedMealIds.has(meal.mealId)}
-        isSaving={create.isPending && create.variables?.mealId === meal.mealId}
-        />
-      ))}
-    </div>
-  )}
-  </>
+  <AuthProvider>
+    <BrowserRouter>
+    <Routes>
+      <Route element={<Shell />}>
+      <Route index element={<SearchPage />} />
+      <Route path="login" element={<LoginPage />} />
+      <Route path="recipe/:mealId" element={<RecipeDetailPage />} />
+      <Route element={<RequireAuth />}>
+      <Route path="saved" element={<SavedPage />} />
+    </Route>
+    <Route path="*" element={<NotFound />} />
+    </Route>
+    </Routes>
+    </BrowserRouter>
+    </AuthProvider>
   );
 }
