@@ -14,7 +14,6 @@ export default function App() {
   const [filter, setFilter] = useState("All");
   const [editing, setEditing] = useState<SavedRecipe | null>(null);
 
-  // Every fetch lives behind a hook (Lab 11). Components never see axios.
   const search = useSearchMeals(term);
   const categories = useCategories();
   const {

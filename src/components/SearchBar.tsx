@@ -6,17 +6,12 @@ interface SearchBarProps {
 
 export default function SearchBar({ onSearch }: SearchBarProps) {
   const [term, setTerm] = useState("");
-
-  // useRef, use 2: a handle on a DOM element. The search box is the first
-  // thing anyone wants on this page, so put the cursor in it on mount.
-  // Typed, so `.current` is an HTMLInputElement and `.focus()` type-checks.
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  // Typing the form event keeps preventDefault checked by TypeScript.
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmed = term.trim();

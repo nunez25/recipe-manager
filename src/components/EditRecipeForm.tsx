@@ -8,7 +8,6 @@ interface EditRecipeFormProps {
   isSaving: boolean;
 }
 
-// Edits the two fields TheMealDB cannot give you: prep time and your own notes.
 export default function EditRecipeForm({
   recipe,
   onSave,
