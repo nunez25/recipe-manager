@@ -1,73 +1,36 @@
-# Recipe Manager — Starter Template
+# Data-Driven Recipe App
 
-Starter scaffold for **PD 2 Major Assessment 1 — Interactive Recipe Manager**. Vite, React 19, Tailwind CSS, and DaisyUI are all pre-installed and configured. Your job is to fill in the TODO comments across `src/App.jsx` and `src/components/`.
+A React and TypeScript recipe manager that searches TheMealDB, saves recipes to a local JSON API, and supports editing, deleting, category filtering, and optimistic favorites.
 
----
+## Run locally
 
-## Getting Started
+Requires Node.js 20 or newer.
 
-```bash
+```powershell
 npm install
+Copy-Item .env.example .env
+```
+
+Keep both processes running in separate terminals:
+
+```powershell
+npm run api
+```
+
+```powershell
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173). You should see the "Recipe Manager" header and an info alert. Once you wire up your components, the alert can be deleted.
+The app reads the public TheMealDB catalogue and uses json-server at `http://localhost:3001` for saved recipes. `.env` is local-only; `.env.example` contains the required Vite URL settings.
 
----
+## Query keys
 
-## Where to Work
+The saved collection and category list use stable keys (`["recipes"]` and `["categories"]`). Search uses `["meals", term]`, because each query result depends on the search term; including it gives every search its own cache entry so returning to a previous term can reuse the correct results. Search is disabled until the term is non-empty.
 
-| File | Your Job |
-|------|----------|
-| `src/App.jsx` | Own all state (`recipes`, `filter`), add all `useEffect`s, define handlers, and render the four child components. |
-| `src/components/RecipeForm.jsx` | Controlled form for adding a new recipe. Empty-title guard. |
-| `src/components/CategoryFilter.jsx` | 5 filter buttons (All / Breakfast / Lunch / Dinner / Dessert). |
-| `src/components/RecipeList.jsx` | Maps over recipes → renders `<RecipeCard />`. Empty state. |
-| `src/components/RecipeCard.jsx` | Title, category, time, ★ favorite toggle, Delete button. |
-| `src/components/SummaryBar.jsx` | Two-stat display: total count and favorite count. |
+## Optimistic favorite rollback
 
-Each file has TODO comments explaining what to build.
+The favorite star updates immediately while the PATCH is pending. If the server rejects the request, the previous cached collection is restored and then invalidated so the displayed state agrees with the server.
 
----
+![Favorite shown optimistically before the failed request rolls back](./docs/optimistic-favorite-rollback.png)
 
-## TODO Order (Recommended)
-
-Work through the TODOs in this order so you can see progress in the browser after each step.
-
-1. **RecipeCard** — hardcode a dummy recipe first to render one card and check the styling.
-2. **RecipeList** — map over the starter recipes and render six cards.
-3. **App: recipes state + handleDelete** — wire delete to see state updates in action.
-4. **RecipeForm** — controlled inputs + `handleAdd`.
-5. **App: handleToggleFavorite** — star button works.
-6. **CategoryFilter + App: filter state** — category filter works.
-7. **SummaryBar** — plug in `total` and `favorites` counts.
-8. **App: three `useEffect`s** — persist recipes, persist filter, sync tab title.
-
-Once step 8 works, refresh the page — nothing should reset.
-
----
-
-## What's Already Installed
-
-- **React 19** with the Vite plugin
-- **Tailwind CSS 3** — `src/index.css` already imports the three layers
-- **DaisyUI 4** — configured with the `light` theme in `tailwind.config.js`
-
-You should NOT need to install anything else for this assessment.
-
----
-
-## Definition of Done
-
-Refer to the **Requirements Checklist** in the assessment handout. Every box must be ticked before submission.
-
----
-
-## Submission Reminder
-
-1. Push to a **public** GitHub repo named `recipe-manager`.
-2. Invite **`jeffdteach`** as a collaborator.
-3. Aim for **at least 5 meaningful commits** across the work — not one giant "final" commit.
-4. Submit the repo URL through the class submission channel.
-
-Good luck!
+Run a production TypeScript and Vite build with `npm run build`.
